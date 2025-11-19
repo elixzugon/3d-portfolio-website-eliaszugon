@@ -22,6 +22,7 @@ function ContactFormComponent({
   })
   const [submitted, setSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -31,16 +32,31 @@ function ContactFormComponent({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
 
-    setSubmitted(true)
-    setFormData({ name: '', email: '', subject: '', message: '' })
-    setIsLoading(false)
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(data.error ?? 'Something went wrong. Please try again.')
+      }
 
-    // Reset success message after 3 seconds
-    setTimeout(() => setSubmitted(false), 3000)
+      setSubmitted(true)
+      setFormData({ name: '', email: '', subject: '', message: '' })
+
+      // Reset success message after 3 seconds
+      setTimeout(() => setSubmitted(false), 3000)
+    } catch (err) {
+      console.error(err)
+      setError(err instanceof Error ? err.message : 'Failed to send your message.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -147,6 +163,7 @@ function ContactFormComponent({
 
           {/* Success Message */}
           <AnimatedSuccessMessage show={submitted} />
+          <AnimatedErrorMessage message={error} />
         </motion.form>
       </div>
     </section>
@@ -161,6 +178,20 @@ function AnimatedSuccessMessage({ show }: { show: boolean }) {
       className="p-4 rounded-lg bg-accent/20 border border-accent/50 text-accent"
     >
       Thank you! Your message has been received. I'll get back to you soon.
+    </motion.div>
+  )
+}
+
+function AnimatedErrorMessage({ message }: { message: string | null }) {
+  if (!message) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="p-4 rounded-lg bg-red-500/10 border border-red-500/40 text-red-400"
+    >
+      {message}
     </motion.div>
   )
 }

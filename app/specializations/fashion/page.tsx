@@ -99,7 +99,7 @@ export default function FashionDesignPage() {
           >
             <ProjectGallery
               items={fashionGalleryItems}
-              title="3D Fashion Deisgn"
+              title="3D Fashion Design"
               description="Browse through some of the digital garments I made in my career as a 3D Fashion Designer."
               disableFilters
               enablePagination

@@ -42,13 +42,19 @@ export default function ProjectGallery({
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const isMobile = useIsMobile()
 
-  const categories = useMemo(() => ['all', ...new Set(items.map(item => item.category))], [items])
+  const categories = useMemo(() => {
+    const availableCategories = items
+      .map(item => item.category)
+      .filter((category): category is string => Boolean(category))
+    return ['all', ...new Set(availableCategories)]
+  }, [items])
   const showFilters = !disableFilters && categories.length > 1
   const filteredItems = filter === 'all' ? items : items.filter(item => item.category === filter)
 
-  const paginationEnabled = !!enablePagination && filteredItems.length > (itemsPerPage ?? filteredItems.length)
-  const resolvedItemsPerPage = paginationEnabled ? Math.max(1, itemsPerPage ?? (isMobile ? 2 : 6)) : filteredItems.length
-  const totalPages = paginationEnabled ? Math.max(1, Math.ceil(filteredItems.length / resolvedItemsPerPage)) : 1
+  const baseItemsPerPage = Math.max(1, itemsPerPage ?? (isMobile ? 2 : 6))
+  const shouldPaginate = !!enablePagination && filteredItems.length > baseItemsPerPage
+  const resolvedItemsPerPage = shouldPaginate ? baseItemsPerPage : filteredItems.length || 1
+  const totalPages = shouldPaginate ? Math.ceil(filteredItems.length / resolvedItemsPerPage) : 1
 
   useEffect(() => {
     if (!isMobile) {
@@ -58,10 +64,14 @@ export default function ProjectGallery({
 
   useEffect(() => {
     setCurrentPage(0)
-  }, [filter, resolvedItemsPerPage])
+  }, [filter, resolvedItemsPerPage, shouldPaginate])
+
+  useEffect(() => {
+    setCurrentPage(prev => Math.min(prev, Math.max(0, totalPages - 1)))
+  }, [totalPages])
 
   const pageStart = currentPage * resolvedItemsPerPage
-  const paginatedItems = paginationEnabled
+  const paginatedItems = shouldPaginate
     ? filteredItems.slice(pageStart, pageStart + resolvedItemsPerPage)
     : filteredItems
 
@@ -166,7 +176,9 @@ export default function ProjectGallery({
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-colors group-hover:bg-black/50">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                    {!hideCategoryBadge && <p className="text-sm text-white/80 capitalize">{item.category}</p>}
+                    {!hideCategoryBadge && item.category && (
+                      <p className="text-sm text-white/80 capitalize">{item.category}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -175,7 +187,7 @@ export default function ProjectGallery({
         </AnimatePresence>
       </motion.div>
 
-      {paginationEnabled && (
+  {shouldPaginate && (
         <div className="mt-10 flex flex-col items-center gap-4">
           <div className="flex items-center gap-3">
             <button
