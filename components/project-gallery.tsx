@@ -29,6 +29,7 @@ interface ProjectGalleryProps {
 
 export default function ProjectGallery({
   items,
+  
   title,
   description,
   disableFilters,
