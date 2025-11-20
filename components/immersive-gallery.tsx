@@ -6,66 +6,102 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Environment, Html, OrbitControls, useGLTF } from '@react-three/drei'
 
 import { useIsMobile } from '@/hooks/use-mobile'
-import { PortfolioModel } from '@/components/portfolio-model'
 
-type SceneModelType = 'blokecambio' | 'ramen' | 'lechuga' | 'pomodoro'
+type SceneModelType =
+  | 'ramen'
+  | 'crfw13'
+  | 'rosauravestido'
+  | 'sombreroflorfuntasia'
+  | 'lechuga'
+  | 'crfw16'
+  | 'pomodoro'
+  | 'jasethpuffer2'
 
 interface ImmersiveScene {
   id: string
   title: string
   description: string
-  category: 'Cosmic Factory' | 'External' | 'Funtasia' | 'Fruitopia' | 'LSH'
+  category: string
   modelType: SceneModelType
   accent: string
 }
 
 const immersiveScenes: ImmersiveScene[] = [
   {
-    id: 'cosmic-factory',
-    title: 'Nebula Atelier Gown',
-    description: 'A sculptural garment suspended in shimmering particles referencing the Cosmic Factory couture silhouettes.',
-    category: 'Cosmic Factory',
-    modelType: 'blokecambio',
-    accent: '#a855f7',
-  },
-  {
-    id: 'external',
-    title: 'External Orbit Dress',
-    description: 'Hard-surface dress layers orbiting around the body to highlight the External capsule technology.',
-    category: 'External',
+    id: 'ramen',
+    title: 'Ramen Combo Set',
+    description: 'A Fruitopia Collection set for Cosmic Factory',
+    category: 'Fruitopia',
     modelType: 'ramen',
     accent: '#22d3ee',
   },
   {
-    id: 'funtasia',
-    title: 'Funtasia Ribbon Look',
-    description: 'Playful ribbons floating around the silhouette inspired by the kinetic Funtasia runway presentation.',
+    id: 'crfw13',
+    title: 'Florévia del Infinito',
+    description: 'Special dress made for Costa Rica Fashion Week 2024 Runway by Cosmic Factory',
     category: 'Funtasia',
-    modelType: 'lechuga',
-    accent: '#f97316',
+    modelType: 'crfw13',
+    accent: '#a855f7',
   },
   {
-    id: 'fruitopia',
-    title: 'Fruitopia Bloom Shell',
-    description: "Layered translucent shells revealing the garment core, evoking Fruitopia's juicy palettes.",
+    id: 'rosauravestido',
+    title: 'Rosaura Dress',
+    description: 'Dress from a Cosmic Factory flash collection',
+    category: 'Flashes',
+    modelType: 'rosauravestido',
+    accent: '#f43f5e',
+  },
+  {
+    id: 'sombreroflorfuntasia',
+    title: 'Alien Flower Hat',
+    description: 'An extraordinary hat made for Costa Rica Fashion Week 2024 Runway by Cosmic Factory',
+    category: 'Funtasia',
+    modelType: 'sombreroflorfuntasia',
+    accent: '#22c55e',
+  },
+  {
+    id: 'lechuga',
+    title: 'Lechuga Dress',
+    description: 'A Fruitopia Collection dress for Cosmic Factory',
     category: 'Fruitopia',
-    modelType: 'pomodoro',
+    modelType: 'lechuga',
     accent: '#84cc16',
   },
   {
-    id: 'lsh',
-    title: 'LSH Halo Armor',
-    description: 'Protective halo surfaces rotating slowly to showcase the LSH avant-garde tailoring.',
-    category: 'LSH',
-    modelType: 'ramen',
+    id: 'crfw16',
+    title: 'Burbuja Obsidiana',
+    description: 'Special set made for Costa Rica Fashion Week 2024 Runway by Cosmic Factory',
+    category: 'Funtasia',
+    modelType: 'crfw16',
     accent: '#0ea5e9',
   },
+  {
+    id: 'pomodoro',
+    title: 'Pomodoro Dress',
+    description: 'A Fruitopia Collection dress for Cosmic Factory',
+    category: 'Fruitopia',
+    modelType: 'pomodoro',
+    accent: '#f97316',
+  },
+  {
+    id: 'jasethpuffer2',
+    title: 'JH Puffer Jacket 2 | DTMF',
+    description: 'A design made by Jaseth Hernández and 3D modeled by me',
+    category: 'DTMF',
+    modelType: 'jasethpuffer2',
+    accent: '#c084fc',
+  },
 ]
-const MODEL_CONFIG: Record<SceneModelType, { url?: string; position: [number, number, number]; scale: number }> = {
-  blokecambio: { position: [0, -3.2, 0], scale: 1.1 },
-  ramen: { url: '/models/blokejortsramencombo.glb', position: [0, -1.6, 0], scale: 0.95 },
-  lechuga: { url: '/models/vestidolechuga.glb', position: [0, -1.4, 0], scale: 0.8 },
-  pomodoro: { url: '/models/vestidopomodoro.glb', position: [0, -1.35, 0], scale: 0.78 },
+
+const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, number, number]; scale: number }> = {
+  ramen: { url: '/models/blokejortsramencombo.glb', position: [0, 0, 0], scale: 3 },
+  crfw13: { url: '/models/crfw13.glb', position: [0, 0, 0], scale: 3 },
+  rosauravestido: { url: '/models/rosauravestido.glb', position: [0, 0, 0], scale: 3 },
+  sombreroflorfuntasia: { url: '/models/sombreroflorfuntasia.glb', position: [0, 0, 0], scale: 3 },
+  lechuga: { url: '/models/vestidolechuga.glb', position: [0, 0, 0], scale: 3 },
+  crfw16: { url: '/models/crfw16.glb', position: [0, 0, 0], scale: 3 },
+  pomodoro: { url: '/models/vestidopomodoro.glb', position: [0, 0, 0], scale: 3 },
+  jasethpuffer2: { url: '/models/jasethpuffer2.glb', position: [0, 0, 0], scale: 3 },
 }
 
 Object.values(MODEL_CONFIG).forEach(config => {
@@ -74,23 +110,23 @@ Object.values(MODEL_CONFIG).forEach(config => {
 
 function SceneModel({ type }: { type: SceneModelType }) {
   const config = MODEL_CONFIG[type]
-  if (!config.url) {
-    return <PortfolioModel position={config.position} scale={config.scale} />
-  }
   const { scene } = useGLTF(config.url)
   return <primitive object={scene} position={config.position} scale={config.scale} />
 }
 
 export default function ImmersiveGallery() {
-  const [filter, setFilter] = useState<'all' | ImmersiveScene['category']>('all')
+  const [filter, setFilter] = useState<'All' | ImmersiveScene['category']>('All')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [fullscreenScene, setFullscreenScene] = useState<ImmersiveScene | null>(null)
   const isMobile = useIsMobile()
 
-  const categories = useMemo(() => ['all', ...new Set(immersiveScenes.map(scene => scene.category))], [])
+  const categories = useMemo(
+    () => ['All', ...new Set(immersiveScenes.map(scene => scene.category))],
+    []
+  )
   const filteredScenes =
-    filter === 'all' ? immersiveScenes : immersiveScenes.filter(scene => scene.category === filter)
+    filter === 'All' ? immersiveScenes : immersiveScenes.filter(scene => scene.category === filter)
 
   const scenesPerPage = isMobile ? 1 : 2
   const totalPages = Math.max(1, Math.ceil(filteredScenes.length / scenesPerPage))

@@ -229,7 +229,7 @@ export default function InteractiveGallery() {
         </div>
 
         {/* Gallery grid */}
-        <motion.div layout className="grid grid-cols-1 grid-rows-2 md:grid-cols-3 md:grid-rows-2 gap-4">
+        <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatePresence mode="popLayout">
             {paginatedImages.map((image, index) => (
               <motion.div

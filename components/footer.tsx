@@ -49,14 +49,14 @@ export default function Footer() {
             <h4 className="font-semibold text-foreground">Connect</h4>
             <div className="flex gap-4">
               <a
-                href="mailto:your.email@example.com"
+                href="mailto:elias.zuniga.bils@gmail.com"
                 aria-label="Email"
                 className="text-foreground/60 hover:text-accent transition-colors"
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/eliaszugon/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -65,7 +65,7 @@ export default function Footer() {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/eliaszugon/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -74,7 +74,7 @@ export default function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/elixzugon"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
@@ -95,7 +95,7 @@ export default function Footer() {
             © {currentYear} All rights reserved. Crafted with creativity and innovation.
           </p>
           <p className="text-foreground/40 text-sm">
-            Designed & Developed by Your Name
+            Designed & Developed by eliaszugon.com
           </p>
         </div>
       </div>

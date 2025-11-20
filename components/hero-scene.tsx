@@ -44,13 +44,13 @@ function Scene() {
       />
 
       {/* Text overlay */}
-      <Html position={[0, -2, 0]} distanceFactor={3.2} center>
+      <Html position={[0, -1, 0]} distanceFactor={3.2} center>
         <div className="text-center pointer-events-none select-none">
           <h2 className="text-3xl sm:text-5xl font-bold text-accent mb-2">
-            ELIASZUGON
+            CLICK ME
           </h2>
           <p className="text-foreground/60 text-sm sm:text-base">
-            Creating powerful multimedia experiences
+            Press the 3D model to check my Interactive Gallery of 3D garments.
           </p>
         </div>
       </Html>
