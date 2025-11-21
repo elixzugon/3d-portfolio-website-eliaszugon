@@ -3,9 +3,10 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import Navigation from '@/components/navigation'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const _geist = Geist({ subsets: ['latin'] });
+const _geistMono = Geist_Mono({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'eliaszugon',
@@ -35,6 +36,7 @@ export default function RootLayout({
           {children}
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
