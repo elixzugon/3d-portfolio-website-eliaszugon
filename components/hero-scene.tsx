@@ -23,7 +23,7 @@ function Scene() {
       </group>
 
  <group ref={groupRef}>
-    <PortfolioModel position={[0, -3.6, 0]} scale={1.5} />
+    <PortfolioModel position={[0, .5, 0]} scale={7} />
   </group>
 
       {/* Lighting */}

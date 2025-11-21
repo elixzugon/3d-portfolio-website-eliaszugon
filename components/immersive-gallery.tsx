@@ -15,7 +15,6 @@ type SceneModelType =
   | 'lechuga'
   | 'crfw16'
   | 'pomodoro'
-  | 'jasethpuffer2'
 
 interface ImmersiveScene {
   id: string
@@ -83,15 +82,34 @@ const immersiveScenes: ImmersiveScene[] = [
     modelType: 'pomodoro',
     accent: '#f97316',
   },
-  {
-    id: 'jasethpuffer2',
-    title: 'JH Puffer Jacket 2 | DTMF',
-    description: 'A design made by Jaseth Hernández and 3D modeled by me',
-    category: 'DTMF',
-    modelType: 'jasethpuffer2',
-    accent: '#c084fc',
-  },
 ]
+
+class StripWebPExtension {
+  name = 'StripWebPExtension'
+  constructor(parser: any) {
+    const { json } = parser ?? {}
+    if (json?.textures) {
+      for (const tex of json.textures) {
+        const ext = tex.extensions?.EXT_texture_webp
+        if (ext && typeof ext.source === 'number') {
+          tex.source = ext.source
+          if (tex.extensions) {
+            delete tex.extensions.EXT_texture_webp
+            if (!Object.keys(tex.extensions).length) delete tex.extensions
+          }
+        }
+      }
+    }
+    const filter = (list?: string[]) => (Array.isArray(list) ? list.filter(x => x !== 'EXT_texture_webp') : list)
+    if (json) {
+      json.extensionsRequired = filter(json.extensionsRequired)
+      json.extensionsUsed = filter(json.extensionsUsed)
+    }
+  }
+  afterRoot(root: unknown) {
+    return root
+  }
+}
 
 const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, number, number]; scale: number }> = {
   ramen: { url: '/models/blokejortsramencombo.glb', position: [0, 0, 0], scale: 3 },
@@ -101,16 +119,21 @@ const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, num
   lechuga: { url: '/models/vestidolechuga.glb', position: [0, 0, 0], scale: 3 },
   crfw16: { url: '/models/crfw16.glb', position: [0, 0, 0], scale: 3 },
   pomodoro: { url: '/models/vestidopomodoro.glb', position: [0, 0, 0], scale: 3 },
-  jasethpuffer2: { url: '/models/jasethpuffer2.glb', position: [0, 0, 0], scale: 3 },
 }
 
 Object.values(MODEL_CONFIG).forEach(config => {
-  if (config.url) useGLTF.preload(config.url)
+  if (config.url) {
+    useGLTF.preload(config.url, undefined, undefined, loader =>
+      loader.register((parser: any) => new StripWebPExtension(parser))
+    )
+  }
 })
 
 function SceneModel({ type }: { type: SceneModelType }) {
   const config = MODEL_CONFIG[type]
-  const { scene } = useGLTF(config.url)
+  const { scene } = useGLTF(config.url, undefined, undefined, loader =>
+    loader.register((parser: any) => new StripWebPExtension(parser))
+  )
   return <primitive object={scene} position={config.position} scale={config.scale} />
 }
 

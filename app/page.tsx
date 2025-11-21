@@ -26,13 +26,22 @@ export default function Home() {
       {/* Projects Showcase */}
       <ProjectGrid />
 
-{/* Parallax Section before Gallery */}
+      {/* Parallax Section before Gallery */}
       <ParallaxSection
-        title="Explore Our Visual Gallery"
-        subtitle="Discover our latest projects and creative work"
+        title="Step Into the Immersive 3D Gallery"
+        subtitle="Watch the garments in motion—jump to the Fashion immersive gallery to explore every look."
         backgroundVideo="/homepage-videos/humanoid.mp4"
         height="h-[380px]"
-      />
+      >
+        <div className="mt-6 flex justify-center">
+          <a
+            href="/specializations/fashion"
+            className="inline-flex rounded-lg bg-accent px-6 py-3 text-accent-foreground font-medium hover:opacity-90 transition-opacity"
+          >
+            View the Immersive Gallery
+          </a>
+        </div>
+      </ParallaxSection>
 
       {/* Interactive Gallery and Contact Form */}
       <InteractiveGallery />
