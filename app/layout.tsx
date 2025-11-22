@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import Navigation from '@/components/navigation'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const _geist = Geist({ subsets: ['latin'] });
 const _geistMono = Geist_Mono({ subsets: ['latin'] });
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`font-sans antialiased bg-background text-foreground`}>
         <Navigation />
+        <ScrollReveal />
         <div className="pt-24 min-h-screen">
           {children}
         </div>

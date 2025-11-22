@@ -52,6 +52,17 @@
   --sidebar-ring: oklch(0.60 0.32 190);
 }
 
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animate-on-scroll--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .dark {
   --background: oklch(0.09 0 0);
   --foreground: oklch(0.95 0 0);
