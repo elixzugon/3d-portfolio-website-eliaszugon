@@ -1,86 +1,90 @@
 'use client'
 
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Html, Environment } from '@react-three/drei'
-import { useRef, useState } from 'react'
-import * as THREE from 'three'
-import { PortfolioModel } from '@/components/portfolio-model'
+import { useEffect, useState } from 'react'
 
-function RotatingObject() {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const [isHovered, setIsHovered] = useState(false)
-
-
-}
-
-function Scene() {
-  const groupRef = useRef<THREE.Group>(null)
-
-  return (
-    <>
-      <group ref={groupRef}>
-        <RotatingObject />
-      </group>
-
- <group ref={groupRef}>
-    <PortfolioModel position={[0, .5, 0]} scale={7} />
-  </group>
-
-      {/* Lighting */}
-      <pointLight position={[20, 10, 20]} intensity={2000} color="#ffffff" />
-      <pointLight position={[-20, 30, 0]} intensity={8000} color="#ffffff" />
-      <pointLight position={[-40, 0, 20]} intensity={8000} color="#ffffff" />
-      <ambientLight intensity={0.4} />
-
-      {/* Environment */}
-      {/*<Environment preset="night" />*/}
-
-      {/* Controls */}
-      <OrbitControls
-        enableZoom={true}
-        enablePan={false}
-        autoRotate
-        autoRotateSpeed={3}
-      />
-
-      {/* <Html position={[0, -1, 0]} distanceFactor={3.2} center>
-        <div className="text-center pointer-events-none select-none">
-          <h2 className="text-3xl sm:text-5xl font-bold text-accent mb-2">
-            Want to create stuff like this?
-          </h2>
-          <p className="text-foreground/60 text-sm sm:text-base">
-            Move around to explore.
-          </p>
-        </div>
-      </Html> */}
-    </>
-  )
-}
+const HERO_VIDEO_SRC = '/homepage-videos/bodegalamp.mp4'
 
 export default function HeroScene() {
-  return (
-    <div className="w-full h-[620px] bg-gradient-to-b from-background via-background to-muted relative overflow-hidden pt-16">
-      <Canvas
-        camera={{ position: [0, 0, 8], fov: 45 }}
-        style={{ width: '100%', height: '100%' }}
-      >
-        <Scene />
-      </Canvas>
+  const [scrollY, setScrollY] = useState(0)
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-foreground/40 animate-bounce">
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY || 0)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const videoTranslateY = Math.min(scrollY * 0.275, 120)
+  const contentTranslateY = Math.min(scrollY * 0.15, 72)
+  const contentOpacity = Math.max(1 - scrollY / 900, 0.55)
+
+  return (
+    <section className="relative min-h-[100svh] w-full overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          src={HERO_VIDEO_SRC}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="absolute top-1/2 left-1/2 h-[114%] w-[114%] max-w-none object-cover will-change-transform"
+          style={{
+            transform: `translate(-50%, calc(-50% + ${videoTranslateY}px)) scale(1.06)`,
+          }}
+        />
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.22),transparent_45%),linear-gradient(to_bottom,rgba(0,0,0,0.12),rgba(0,0,0,0.65))]" />
+      </div>
+
+      <div
+        className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl items-end px-6 pb-20 sm:items-center sm:pb-24 lg:px-10 will-change-transform"
+        style={{
+          transform: `translateY(${contentTranslateY}px)`,
+          opacity: contentOpacity,
+        }}
+      >
+        <div className="max-w-2xl">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-white/75 sm:text-sm">
+            Bienvenido al universo de Elias Zugon
+          </p>
+          <h1 className="text-4xl leading-tight font-bold text-white sm:text-5xl lg:text-6xl">
+            Descubre un sitio hecho para explorar 3D, fashion visuals, AR y motion design.
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+            Desliza para recorrer el portafolio o entra directo a proyectos creados para marcas y experiencias digitales.
+          </p>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="/projects"
+              className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90 sm:text-base"
+            >
+              Explorar proyectos
+            </a>
+            <a
+              href="/specializations/fashion"
+              className="rounded-full border border-white/55 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/15 sm:text-base"
+            >
+              Ver especializaciones
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 animate-bounce text-white/75">
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
+          stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
           viewBox="0 0 24 24"
-          stroke="currentColor"
         >
-          <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+          <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       </div>
-    </div>
+    </section>
   )
 }
