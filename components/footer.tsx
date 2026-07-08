@@ -41,6 +41,9 @@ export default function Footer() {
               <Link href="/projects" className="text-foreground/60 hover:text-accent transition-colors text-sm">
                 All Projects
               </Link>
+              <Link href="/motion-graphics" className="text-foreground/60 hover:text-accent transition-colors text-sm">
+                Motion Graphics
+              </Link>
             </nav>
           </div>
 

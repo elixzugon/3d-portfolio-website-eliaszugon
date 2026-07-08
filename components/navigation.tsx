@@ -14,6 +14,7 @@ export default function Navigation() {
     { href: '/projects', label: 'All Projects' },
     { href: '/photography', label: 'Photography' },
     { href: '/video', label: 'Video' },
+    { href: '/motion-graphics', label: 'Motion Graphics' },
     { href: '/design', label: 'UX Design', hidden: true },
     { href: '/graphic-design', label: 'Graphic Design', hidden: true },
     { href: '/web-development', label: 'Web Development', hidden: true },

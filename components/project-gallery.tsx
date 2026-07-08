@@ -27,6 +27,8 @@ interface ProjectGalleryProps {
   hideCategoryBadge?: boolean
 }
 
+const isDirectVideoFile = (url?: string) => Boolean(url && /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url))
+
 export default function ProjectGallery({
   items,
   
@@ -169,11 +171,30 @@ export default function ProjectGallery({
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-lg bg-muted aspect-video">
-                <motion.img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                />
+                {isDirectVideoFile(item.thumbnail) ? (
+                  <motion.video
+                    src={item.thumbnail}
+                    aria-label={item.title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    onMouseEnter={event => {
+                      void event.currentTarget.play().catch(() => undefined)
+                    }}
+                    onMouseLeave={event => {
+                      event.currentTarget.pause()
+                      event.currentTarget.currentTime = 0
+                    }}
+                  />
+                ) : (
+                  <motion.img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                )}
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-colors group-hover:bg-black/50">
                   <div className="text-center">
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
@@ -245,15 +266,26 @@ export default function ProjectGallery({
               </button>
               <div className="aspect-video bg-background">
                 {selectedItem.type === 'video' && selectedItem.videoUrl ? (
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src={selectedItem.videoUrl}
-                    title={selectedItem.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  isDirectVideoFile(selectedItem.videoUrl) ? (
+                    <video
+                      src={selectedItem.videoUrl}
+                      title={selectedItem.title}
+                      className="h-full w-full object-contain"
+                      controls
+                      autoPlay
+                      playsInline
+                    />
+                  ) : (
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={selectedItem.videoUrl}
+                      title={selectedItem.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  )
                 ) : (
                   <img
                     src={selectedItem.fullImage || '/placeholder.svg'}
