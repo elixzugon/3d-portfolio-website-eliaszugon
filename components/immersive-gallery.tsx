@@ -4,7 +4,6 @@ import { Suspense, useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Environment, Html, OrbitControls, useGLTF } from '@react-three/drei'
-import { TextureLoader } from 'three'
 
 import { useIsMobile } from '@/hooks/use-mobile'
 
@@ -36,22 +35,6 @@ function installGLTFTextureErrorFilter() {
 }
 
 installGLTFTextureErrorFilter()
-
-// These fashion GLBs embed large WebP textures; TextureLoader is more reliable than ImageBitmapLoader here.
-class BrowserTextureLoaderExtension {
-  name = 'BrowserTextureLoaderExtension'
-
-  constructor(parser: any) {
-    const textureLoader = new TextureLoader(parser.options.manager)
-    textureLoader.setCrossOrigin(parser.options.crossOrigin)
-    textureLoader.setRequestHeader(parser.options.requestHeader)
-    parser.textureLoader = textureLoader
-  }
-
-  afterRoot() {
-    return null
-  }
-}
 
 type SceneModelType =
   | 'ramen'
@@ -142,9 +125,7 @@ const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, num
 
 function SceneModel({ type }: { type: SceneModelType }) {
   const config = MODEL_CONFIG[type]
-  const { scene } = useGLTF(config.url, undefined, undefined, loader =>
-    loader.register((parser: any) => new BrowserTextureLoaderExtension(parser))
-  )
+  const { scene } = useGLTF(config.url)
   return <primitive object={scene} position={config.position} scale={config.scale} />
 }
 
