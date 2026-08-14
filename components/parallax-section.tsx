@@ -7,7 +7,7 @@ interface ParallaxSectionProps {
   title: string
   subtitle?: string
   backgroundImage?: string
-  backgroundVideo?: string   // 👉 NUEVO
+  backgroundVideo?: string
   height?: string
   children?: React.ReactNode
 }
@@ -16,7 +16,7 @@ export default function ParallaxSection({
   title,
   subtitle,
   backgroundImage = '/abstract-3d-creative-background.jpg',
-  backgroundVideo,            // 👉 NUEVO
+  backgroundVideo,
   height = 'h-[500px]',
   children,
 }: ParallaxSectionProps) {
@@ -46,14 +46,13 @@ export default function ParallaxSection({
             muted
             loop
             playsInline
-            preload="metadata" // para no descargar todo de una vez
+            preload="metadata"
           />
         ) : (
           <div
             className="w-full h-full bg-cover bg-center"
             style={{
               backgroundImage: `url('${backgroundImage}')`,
-              // en video ya no necesitamos backgroundAttachment
               backgroundAttachment: 'fixed',
             }}
           />

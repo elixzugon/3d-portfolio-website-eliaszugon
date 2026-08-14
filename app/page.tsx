@@ -9,7 +9,7 @@ import ParallaxSection from '@/components/parallax-section'
 
 export default function Home() {
   return (
-    <main className="w-full -mt-24">
+    <main className="w-full">
       {/* Fullscreen hero */}
       <HeroScene />
 
@@ -19,7 +19,7 @@ export default function Home() {
       {/* Parallax Section before Gallery */}
       <ParallaxSection
         title="Step Into the Immersive 3D Gallery"
-        subtitle="Watch the garments in motion—jump to the Fashion immersive gallery to explore every look."
+        subtitle="Watch the garments in motion - jump to the fashion immersive gallery to explore every look."
         backgroundVideo="/homepage-videos/humanoid.mp4"
         height="h-[380px]"
       >

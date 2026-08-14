@@ -2,21 +2,20 @@
 
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import { ContactForm } from '@/components/contact-form'
 
 const headlineStats = [
   { label: 'Years crafting visuals', value: '10+' },
-  { label: 'Roles blended', value: 'Video • 3D • Motion Graphics • UX Design • Web Development' },
-  { label: 'Based in', value: 'San José, Costa Rica' },
+  { label: 'Roles blended', value: 'Video - 3D - Motion Graphics - UX Design - Web Development' },
+  { label: 'Based in', value: 'San Jose, Costa Rica' },
 ]
 
 const competencies = [
   'CGI & 3D animation',
   'Motion graphics & visual storytelling',
   'Entrepreneurial mindset',
-  'Cross‑disciplinary collaboration',
+  'Cross-disciplinary collaboration',
   'Bilingual communication',
   'Project delivery under deadlines',
   'Adaptability & innovation trends',
@@ -34,34 +33,34 @@ const experience = [
   {
     role: 'Video Specialist & Motion Designer',
     company: 'RMI Health',
-    period: '2024 – 2025',
+    period: '2024 - 2025',
     bullets: [
       'Produced testimonial, educational, and commercial video content to drive engagement.',
-      'Crafted marketing-ready visuals that boosted communication for sales and commerce.',
+      'Crafted marketing-ready visuals that improved sales and commerce communication.',
     ],
   },
   {
     role: 'Multimedia Designer | Video Editor',
     company: 'Wagner & Carter',
-    period: '2023 – 2024',
+    period: '2023 - 2024',
     bullets: [
-      'Shot and edited multimedia content for diverse industries.',
+      'Shot and edited multimedia content for clients across diverse industries.',
       'Designed assets and landing experiences supporting digital campaigns.',
     ],
   },
   {
     role: 'Co-Founder | 3D Fashion & CGI Designer',
     company: 'Cosmic Factory',
-    period: '2020 – Present',
+    period: '2020 - Present',
     bullets: [
-      'Designed 3D garments and digital fashion collections with precision and innovation.',
-      'Built immersive runway experiences including Costa Rica Fashion Week “Funtasia – Digital Runway”.',
+      'Designed 3D garments and digital fashion collections with technical precision and creative direction.',
+      'Built immersive runway experiences including Costa Rica Fashion Week "Funtasia - Digital Runway".',
     ],
   },
   {
     role: 'Video Specialist | 3D & Motion Designer | Multimedia Creator',
     company: 'Freelance',
-    period: '2015 – Present',
+    period: '2015 - Present',
     bullets: [
       'Developed AR visuals, 3D animation, and motion graphics for activations and campaigns.',
       'Delivered branding, web solutions, and multimedia content across industries.',
@@ -72,12 +71,12 @@ const experience = [
 const education = [
   {
     degree: 'Licentiate in Informatics & Multimedia Technology (UX emphasis)',
-    place: 'Universidad de Costa Rica',
+    place: 'University of Costa Rica',
     period: 'In progress',
   },
   {
     degree: 'BA in Informatics & Multimedia Technology',
-    place: 'Universidad de Costa Rica',
+    place: 'University of Costa Rica',
     period: '2024',
   },
 ]
@@ -104,14 +103,13 @@ export default function AboutPage() {
         (acc, current) => ({ ...acc, [current]: current === key ? !isOpen : false }),
         {} as Record<string, boolean>
       )
+
       if (!isOpen) {
         requestAnimationFrame(() => {
-          const el = sectionRefs.current[key]
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }
+          sectionRefs.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         })
       }
+
       return nextState
     })
   }
@@ -123,6 +121,7 @@ export default function AboutPage() {
       .join('')
       .slice(0, 3)
       .toUpperCase()
+
     return (
       <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/25 px-3 py-1 text-xs text-white">
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-[11px] font-semibold text-white">
@@ -135,14 +134,7 @@ export default function AboutPage() {
 
   return (
     <main className="w-full bg-background text-foreground">
-      <Navigation />
-
       <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-black/40">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
-          <div className="absolute right-10 bottom-0 h-72 w-72 rounded-full bg-primary/10 blur-[90px]" />
-        </div>
-
         <div className="relative max-w-6xl mx-auto px-4 lg:px-8 pt-14 pb-12 lg:pb-20">
           <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
             <motion.div
@@ -151,11 +143,10 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="relative w-full max-w-md drop-shadow-2xl"
             >
-              <div className="absolute -inset-5 rounded-[28px] bg-gradient-to-br from-white/12 via-white/6 to-transparent blur-2xl" />
               <div className="relative overflow-hidden rounded-[24px] border border-white/15 bg-white/5 backdrop-blur-sm shadow-xl">
                 <img
                   src="/aboutme/yo.jpg"
-                  alt="Elías Zúñiga"
+                  alt="Elias Zuniga"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/30 to-transparent lg:hidden" />
@@ -164,7 +155,7 @@ export default function AboutPage() {
                     <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-[11px] uppercase tracking-[0.25em] backdrop-blur">
                       About Me
                     </div>
-                    <h1 className="text-3xl font-bold leading-tight">Elías Zúñiga González</h1>
+                    <h1 className="text-3xl font-bold leading-tight">Elias Zuniga Gonzalez</h1>
                     <p className="text-sm text-white/85">
                       Video Specialist, 3D Animator, and Motion Designer crafting immersive visual stories that merge CGI,
                       motion graphics, and interactive media.
@@ -200,7 +191,7 @@ export default function AboutPage() {
                 About Me
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]">
-                Elías Zúñiga González
+                Elias Zuniga Gonzalez
               </h1>
               <p className="text-lg text-white/80 max-w-2xl">
                 Video Specialist, 3D Animator, and Motion Designer crafting immersive visual stories that merge CGI,
@@ -255,9 +246,9 @@ export default function AboutPage() {
               Creative Multimedia Designer Focused on CGI and Motion.
             </h2>
             <p className="text-foreground/70 leading-relaxed">
-              With foundations in Informatics and Multimedia Technology (UX emphasis), I combine a user-centric
+              With foundations in Informatics and Multimedia Technology with a UX emphasis, I combine a user-centric
               mindset with technical craft to deliver cinematic visuals, interactive experiences, and story-driven
-              content. I thrive at the intersection of creativity and technology, collaborating across disciplines to
+              content. I work at the intersection of creativity and technology, collaborating across disciplines to
               ship polished work under real deadlines.
             </p>
           </motion.div>
@@ -327,7 +318,7 @@ export default function AboutPage() {
                     className="inline-flex items-center gap-2 rounded-full bg-muted/40 px-4 py-2 text-sm text-foreground"
                   >
                     <span className="h-2 w-2 rounded-full bg-accent" />
-                    {lang.name} — {lang.level}
+                    {lang.name} - {lang.level}
                   </span>
                 ))}
               </div>
@@ -361,7 +352,7 @@ export default function AboutPage() {
                 className="w-full flex items-center justify-between px-5 sm:px-6 py-4 text-left text-lg font-semibold text-foreground hover:bg-card/60 transition"
               >
                 <span>{section.title}</span>
-                <span className="text-accent">{openSections[section.key] ? '−' : '+'}</span>
+                <span className="text-accent">{openSections[section.key] ? '-' : '+'}</span>
               </button>
               {openSections[section.key] && (
                 <div className="px-5 sm:px-6 pb-6">
@@ -376,8 +367,8 @@ export default function AboutPage() {
       <section className="px-4 lg:px-8 pb-12">
         <div className="max-w-7xl mx-auto">
           <ContactForm
-            title="Let’s create something bold"
-            description="Share your idea, timeline, and goals—I'll design visuals and motion that elevate your story."
+            title="Let's create something bold"
+            description="Share your idea, timeline, and goals - I'll design visuals and motion that elevate your story."
           />
         </div>
       </section>

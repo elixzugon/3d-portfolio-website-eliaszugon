@@ -1,330 +1,549 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
+import { motion } from 'framer-motion'
 import Footer from '@/components/footer'
-import { useEffect, useState } from 'react'
-import { useIsMobile } from '@/hooks/use-mobile'
+import ProjectGallery from '@/components/project-gallery'
 
-interface YouTubeProject {
+type ProjectType = 'image' | 'video'
+
+interface ProjectItem {
   id: string
   title: string
-  description: string
-  youtubeId: string
+  description?: string
   category: string
-  date: string
+  categories?: string[]
+  thumbnail: string
+  fullImage: string
+  type: ProjectType
+  videoUrl?: string
+  thumbnailTime?: number | 'middle'
 }
 
-const youtubeProjects: YouTubeProject[] = [
-  {
-    id: '1',
-    title: 'Fruitopia Prelease Animation',
-    description: 'Made this animation to announce the launching of Fruitopia Collection.',
-    youtubeId: '1ND2z40c3sE',
-    category: 'AR',
-    date: '2025',
-  },
-  {
-    id: '2',
-    title: 'AR Animation | Showcasing Pixel Collection',
-    description: 'AR project made to present Pixel Collection by Cosmic Factory.',
-    youtubeId: '0LFeKu6IvNk',
-    category: 'AR',
-    date: '2024',
-  },
-  {
-    id: '3',
-    title: 'AR Animation | Cosmic Factory Funtasia Garment',
-    description: 'Random AR animation made to remember a piece of the Funtasia Collection.',
-    youtubeId: 'MFDj1mmzcb4',
-    category: 'AR',
-    date: '2024',
-  },
-  {
-    id: '4',
-    title: 'Cosmic Factory Funtasia Logo Animation',
-    description: 'Cosmic Factory Logo loop animation made for CRFW.',
-    youtubeId: '4pYLd2lOsE4',
-    category: 'Brands',
-    date: '2024',
-  },
-  {
-    id: '5',
-    title: 'Jaseth Hernández 3D Logo Animation',
-    description: 'Created for the designer Jaseth Hernández, presented in his runway at Costa Rica Fashion Week 2025',
-    youtubeId: 'yuEgmFrA1GU',
-    category: 'Brands',
-    date: '2025',
-  },
-  {
-    id: '6',
-    title: 'Brite Boy Thrift Shop Logo Animation',
-    description: 'Animated the Brite Boy logo made by Mariana Aragón.',
-    youtubeId: 'j2g3txq_xGk',
-    category: 'Brands',
-    date: '2025',
-  },
-  {
-    id: '7',
-    title: 'Fruitopia Market Cosmic Factory',
-    description: 'A Cosmic Factory Collection.',
-    youtubeId: 'IUqh41Bs-nw',
-    category: 'Fashion',
-    date: '2024-07',
-  },
-  {
-    id: '8',
-    title: 'Little Shop of Horrors X Cosmic Factory',
-    description: 'Animation created to promote the Cosmic Factory collaboration with Oak Productions for their theatre production of Little Shop of Horrors.',
-    youtubeId: 'gca7KZo1OyU',
-    category: 'Brands',
-    date: '2025',
-  },
-  {
-    id: '9',
-    title: 'Funtasia Collection Digital Runway',
-    description: 'Cosmic Factory presented a Digital Runway Collection at the Costa Rica Fashion Week 2024, were they rocked with the first Digital Runway ever presented in the country.',
-    youtubeId: '_BE3mULdawo',
-    category: 'Fashion',
-    date: '2025',
-  },
+const youtubeProject = (
+  id: string,
+  title: string,
+  description: string,
+  youtubeId: string,
+  category: string,
+  categories?: string[]
+): ProjectItem => ({
+  id,
+  title,
+  description,
+  category,
+  categories,
+  thumbnail: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+  fullImage: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+  type: 'video',
+  videoUrl: `https://www.youtube.com/embed/${youtubeId}`,
+})
+
+const localVideoProject = (
+  id: string,
+  title: string,
+  description: string,
+  videoUrl: string,
+  category: string,
+  thumbnailTime?: number | 'middle'
+): ProjectItem => ({
+  id,
+  title,
+  description,
+  category,
+  thumbnail: videoUrl,
+  fullImage: videoUrl,
+  type: 'video',
+  videoUrl,
+  thumbnailTime,
+})
+
+const imageProject = (
+  id: string,
+  title: string,
+  description: string,
+  imageUrl: string,
+  category: string
+): ProjectItem => ({
+  id,
+  title,
+  description,
+  category,
+  thumbnail: imageUrl,
+  fullImage: imageUrl,
+  type: 'image',
+})
+
+const motionVideoPath = (fileName: string) => `/motiongraphics/${fileName}`
+
+const allProjects: ProjectItem[] = [
+  youtubeProject(
+    'fashion-fruitopia-market',
+    'Fruitopia Market Cosmic Factory',
+    'A Cosmic Factory Collection.',
+    'IUqh41Bs-nw',
+    '3D Fashion'
+  ),
+  youtubeProject(
+    'fashion-ar-funtasia-garment',
+    'AR Animation | Cosmic Factory Funtasia Garment',
+    'AR fashion animation made to revisit a piece from the Funtasia Collection.',
+    'MFDj1mmzcb4',
+    '3D Fashion',
+    ['3D Fashion', 'Augmented Reality']
+  ),
+  youtubeProject(
+    'fashion-ar-pixel-collection',
+    'AR Animation | Showcasing Pixel Collection',
+    'AR project made to present Pixel Collection by Cosmic Factory.',
+    '0LFeKu6IvNk',
+    '3D Fashion',
+    ['3D Fashion', 'Augmented Reality']
+  ),
+  youtubeProject(
+    'fashion-funtasia-runway',
+    'Funtasia Collection Digital Runway',
+    'Cosmic Factory presented a digital runway collection at Costa Rica Fashion Week 2024.',
+    '_BE3mULdawo',
+    '3D Fashion'
+  ),
+  localVideoProject(
+    'fashion-bloke-cambio-numeros',
+    'Bloke Cambio Numeros',
+    '3D fashion animation piece for Cosmic Factory.',
+    '/homepage-videos/blokecambionumeros.mp4',
+    '3D Fashion'
+  ),
+
+  localVideoProject(
+    '3d-cosmic-casino',
+    'Cosmic Casino Animation',
+    'Featured 3D animation piece with casino-inspired visuals and polished campaign pacing.',
+    '/product-animation/COSMIC%20CASINO%20ANIMATION.mp4',
+    '3D Animation'
+  ),
+  localVideoProject(
+    '3d-bodega-lamp',
+    'Bodega Design Lamp Animation',
+    '3D product animation for a design lamp.',
+    '/homepage-videos/bodegalamp.mp4',
+    '3D Animation'
+  ),
+  localVideoProject(
+    '3d-princesa-cosmos',
+    'Coleccion Princesa del Cosmos 1 WITH SFX',
+    '3D fashion animation with sound design for the Princesa del Cosmos collection.',
+    '/product-animation/Colecci%C3%B3n%20Princesa%20del%20Cosmos%201%20WITH%20SFX.mp4',
+    '3D Animation'
+  ),
+  localVideoProject(
+    '3d-ajedrez',
+    'Ajedrez',
+    '3D animation piece built around graphic rhythm, cuts, and a concise social format.',
+    '/motiongraphics/ajedrez.mp4',
+    '3D Animation',
+    'middle'
+  ),
+  youtubeProject(
+    '3d-cosmic-logo',
+    'Cosmic Factory Funtasia Logo Animation',
+    'Cosmic Factory logo loop animation made for CRFW.',
+    '4pYLd2lOsE4',
+    '3D Animation'
+  ),
+  youtubeProject(
+    '3d-jaseth-logo',
+    'Jaseth Hernandez Logo Animation',
+    'Logo animation created for designer Jaseth Hernandez.',
+    'yuEgmFrA1GU',
+    '3D Animation'
+  ),
+  imageProject(
+    '3d-jh-logo-explosion',
+    'JH Logo Explosion',
+    'Rendered logo exploration with dimensional materials and motion direction.',
+    '/3d-fashion-design-media/3D-LOGO-MATTE-1.webp',
+    '3D Animation'
+  ),
+  youtubeProject(
+    '3d-brite-boy-logo',
+    'Brite Boy Logo Animation',
+    'Animated logo piece for Brite Boy Thrift Shop.',
+    'j2g3txq_xGk',
+    '3D Animation'
+  ),
+  imageProject(
+    '3d-rmi-logo',
+    'The Regenerative Medicine Institute Logo Animation',
+    'Rendered logo animation frame for The Regenerative Medicine Institute.',
+    '/3d-fashion-design-media/0069-1024x576.png',
+    '3D Animation'
+  ),
+  imageProject(
+    '3d-grupo-rs-logo',
+    'Grupo R&S Logo Animation',
+    'Rendered logo animation frame for Grupo R&S.',
+    '/3d-fashion-design-media/0212-1024x722.png',
+    '3D Animation'
+  ),
+  youtubeProject(
+    '3d-little-shop',
+    'Little Shop of Horrors X Cosmic Factory',
+    'Animation created to promote the Cosmic Factory collaboration with Oak Productions.',
+    'gca7KZo1OyU',
+    '3D Animation'
+  ),
+  youtubeProject(
+    '3d-olivia-advent',
+    'Olivia Advent Calendar',
+    'Short-form 3D animation piece for an advent calendar campaign.',
+    'rLwHgVjrT8w',
+    '3D Animation'
+  ),
+
+  youtubeProject(
+    'ar-fruitopia-prelaunch',
+    'Fruitopia Pre-launch Animation',
+    'Animation created to announce the launch of the Fruitopia Collection.',
+    '1ND2z40c3sE',
+    'Augmented Reality'
+  ),
+  youtubeProject(
+    'ar-cosmic-dress-rohrmoser',
+    'AR Cosmic Dress at Rohrmoser',
+    'Augmented reality fashion piece placed in a real-world environment.',
+    'wTJ4O6G6pkU',
+    'Augmented Reality'
+  ),
+
+  youtubeProject(
+    'motion-opening-mounjaro',
+    'Opening Animation: Mounjaro',
+    'Opening animation designed for a 20 x 3 meter panoramic LED screen. Its ultra-wide composition reflects the original venue format, so the piece may appear unusually stretched when viewed in a standard video frame.',
+    'gAKPrPHfKRc',
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-secrets-halloween',
+    'Reel Animacion Secrets Halloween 2025',
+    'Vertical Halloween reel with campaign graphics, animated reveals, and social pacing.',
+    motionVideoPath('reel-animacion-secrets-halloween-2025.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-euphoria-fade-out',
+    'Reel Euphoria Fade Out',
+    'Fashion and lifestyle reel using transition timing, atmosphere, and fade-out treatment.',
+    motionVideoPath('reel-euphoria-fade-out.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-siku-cuts',
+    'Siku Anim Cuts 1',
+    'Motion edit with product-style cuts, clean staging, and fast visual changes.',
+    motionVideoPath('siku-anim-cuts-1.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-outfits-amanda-2',
+    'Video Outfits Amanda 2',
+    'Fashion motion piece for Amanda outfits, built for short-form viewing.',
+    motionVideoPath('video-outfits-amanda-2.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-revo-360',
+    'Video Revo 360',
+    '360-style visual animation focused on dimensional movement and product presentation.',
+    motionVideoPath('video-revo-360.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-caso-pcma',
+    'Caso PCMA',
+    'Case-study style motion piece built to communicate process, results, and context.',
+    motionVideoPath('caso-pcma.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-equifax-audio',
+    'Equifax Anim con Audio',
+    'Motion piece with audio-driven timing for a corporate communication asset.',
+    motionVideoPath('equifax-anim-con-audio.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-planeta-ambulancia',
+    'Planeta Ambulancia',
+    'Animated communication piece using illustrative motion and a clear narrative structure.',
+    motionVideoPath('planeta-ambulancia.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-general-fixed',
+    'General Fixed',
+    'General-purpose motion edit combining branded graphics and animated elements.',
+    motionVideoPath('general-fixed.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-breakdown-revo',
+    'Breakdown Revo 360 Teaser',
+    'Teaser edit showing motion layers and the construction of a 360 visual sequence.',
+    motionVideoPath('breakdown-revo-360-teaser.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-halloween-promo',
+    'Animacion Promo Halloween V1',
+    'Promotional Halloween animation with fast cuts and seasonal graphics.',
+    motionVideoPath('animacion-promo-halloween-v1.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-amanda-outfits',
+    'Amanda Outfits',
+    'Fashion motion edit focused on outfit transitions and social-first delivery.',
+    motionVideoPath('amanda-outfits.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-affiliation',
+    'Affiliation Animation',
+    'Informational animation for affiliation messaging.',
+    motionVideoPath('animacion-afiliacion.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-fathers-day',
+    "Father's Day Animation",
+    "Campaign animation created for a Father's Day message.",
+    motionVideoPath('animacion-dia-del-padre.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-marcas',
+    'Marcas',
+    'Brand-focused animation sequence designed to present multiple identities.',
+    motionVideoPath('marcas.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-marketing-no-falla',
+    'Marketing no falla',
+    'Social motion asset with direct messaging and energetic timing.',
+    motionVideoPath('marketing-no-falla.mp4'),
+    'Motion Graphics'
+  ),
+  localVideoProject(
+    'motion-video-pngs',
+    'Video PNGs',
+    'Graphic animation sequence using layered PNG assets and kinetic layouts.',
+    motionVideoPath('video-pngs.mp4'),
+    'Motion Graphics'
+  ),
+
+  youtubeProject(
+    'video-cosmic-opening',
+    'Invitation to Cosmic Factory Opening | 2025',
+    'A short reel inviting guests to the Cosmic Factory opening for 2025.',
+    'I8PnM0DvWss',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-maxi-skirt',
+    'Maxi Skirt Cosmic Review',
+    'Reel showcasing the Maxi Skirt review from Cosmic Factory.',
+    '1WKcMlsob7E',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-cosmic-outfit',
+    'How to wear a Cosmic Outfit',
+    'Quick styling tips in a reel on wearing a Cosmic outfit.',
+    'v9jbOChtcw0',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-ximena-podcast',
+    'How I Built My Own Brand | Ximena Atem.at & Enovavintage',
+    'Podcast conversation on building a brand solo with Ximena Atem.at & Enovavintage.',
+    'Img-6ak6FPI',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-gosve-sessions',
+    'Gosve Sessions EP.07',
+    'Live music session from Gosve Sessions.',
+    'd2mENSP-ZEc',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-cosmic-picnic',
+    'Cosmic Picnic Video',
+    'Reel capturing the Cosmic Picnic experience.',
+    '1AtGj4UEkK4',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-rmi-liam',
+    'RMI | Liam Harrison Testimonial_',
+    'Reel testimonial from Liam Harrison for RMI.',
+    '_IYH7tZiymY',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-rmi-cartilage',
+    'RMI | Regenerate your cartilage without surgery',
+    'Corporate explainer for RMI on non-surgical cartilage regeneration.',
+    'SAXRr3px_Ok',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-every-minute-counts',
+    'Every Minute Counts in Every Clinic',
+    'Corporate video highlighting critical care response times.',
+    'RgvoMzEnHng',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-emergency-services',
+    'Emergency Medical Services Corporate Video',
+    'Corporate reel for Emergency Medical Services.',
+    '1RKadV-nlAw',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-rmi-harmony',
+    'RMI | Harmony Treatment',
+    'Corporate overview for RMI Harmony treatment.',
+    'J_X2a7AtM0I',
+    'Video Production'
+  ),
+  youtubeProject(
+    'video-grupo-rs',
+    'Grupo R&S Corporate Video',
+    'Corporate profile for Grupo R&S.',
+    'Uo8NAKzIXEA',
+    'Video Production'
+  ),
+
+  imageProject(
+    'ux-ecommerce-redesign',
+    'E-Commerce Platform Redesign',
+    'Modernizing user experience with improved navigation and visual hierarchy.',
+    '/e-commerce-website-ui-design.jpg',
+    'UX Design'
+  ),
+  imageProject(
+    'ux-mobile-app',
+    'Mobile App Experience',
+    'Intuitive mobile interfaces focused on smooth navigation and interaction feedback.',
+    '/mobile-app-ui-design-interface.jpg',
+    'UX Design'
+  ),
+  imageProject(
+    'ux-design-system',
+    'Design System',
+    'Comprehensive design system for enterprise applications.',
+    '/design-system-components.png',
+    'UX Design'
+  ),
+  imageProject(
+    'ux-saas-dashboard',
+    'SaaS Dashboard',
+    'Dashboard design for complex data visualization and actionable insights.',
+    '/saas-dashboard-design.jpg',
+    'UX Design'
+  ),
+
+  imageProject(
+    'graphic-brand-identity',
+    'Brand Identity System',
+    'Complete visual identity from logo design to brand guidelines.',
+    '/graphic-design-branding-identity.jpg',
+    'Graphic Design'
+  ),
+  imageProject(
+    'graphic-print-materials',
+    'Print Materials Collection',
+    'Professional print design including business cards, letterheads, and packaging.',
+    '/graphic-design-print-materials.jpg',
+    'Graphic Design'
+  ),
+  imageProject(
+    'graphic-poster-campaign',
+    'Poster Campaign',
+    'Bold poster designs for marketing campaigns.',
+    '/graphic-design-poster-campaign.jpg',
+    'Graphic Design'
+  ),
+  imageProject(
+    'graphic-publication-design',
+    'Publication Design',
+    'Magazine and editorial layout design with strong typography and visual hierarchy.',
+    '/publication-design-magazine.jpg',
+    'Graphic Design'
+  ),
+
+  imageProject(
+    'web-responsive-design',
+    'Responsive Web Design',
+    'Modern responsive websites built for performance and usability across devices.',
+    '/web-development-responsive-design.jpg',
+    'Web Development'
+  ),
+  imageProject(
+    'web-admin-dashboard',
+    'Admin Dashboard',
+    'Data management dashboard with analytics, user management, and reporting.',
+    '/web-development-dashboard.jpg',
+    'Web Development'
+  ),
+  imageProject(
+    'web-ecommerce-platform',
+    'E-Commerce Platform',
+    'Full-featured e-commerce solution with payment and order management flows.',
+    '/ecommerce-web-development.jpg',
+    'Web Development'
+  ),
+  imageProject(
+    'web-pwa',
+    'Progressive Web App',
+    'PWA with offline functionality and a native-like user experience.',
+    '/progressive-web-app-development.jpg',
+    'Web Development'
+  ),
 ]
 
 export default function ProjectsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [filteredProjects, setFilteredProjects] = useState<YouTubeProject[]>(youtubeProjects)
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [columns, setColumns] = useState(1)
-  const isMobile = useIsMobile()
-  const rowsPerPage = 2
-
-  useEffect(() => {
-    if (selectedCategory === 'all') {
-      setFilteredProjects(youtubeProjects)
-    } else {
-      setFilteredProjects(youtubeProjects.filter(p => p.category === selectedCategory))
-    }
-  }, [selectedCategory])
-
-  const categories = ['all', ...new Set(youtubeProjects.map(p => p.category))]
-
-  useEffect(() => {
-    if (!isMobile) {
-      setMobileFiltersOpen(false)
-    }
-  }, [isMobile])
-
-  useEffect(() => {
-    const calculateColumns = () => {
-      if (typeof window === 'undefined') return 1
-      if (window.innerWidth >= 1024) return 3
-      if (window.innerWidth >= 768) return 2
-      return 1
-    }
-
-    const updateColumns = () => setColumns(calculateColumns())
-    updateColumns()
-    window.addEventListener('resize', updateColumns)
-    return () => window.removeEventListener('resize', updateColumns)
-  }, [])
-
-  const cardsPerPage = rowsPerPage * columns
-
-  useEffect(() => {
-    setCurrentPage(0)
-  }, [selectedCategory, cardsPerPage])
-
-  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / cardsPerPage))
-
-  const handleCategoryChange = (cat: string) => {
-    setSelectedCategory(cat)
-    if (isMobile) {
-      setMobileFiltersOpen(false)
-    }
-  }
-
-  useEffect(() => {
-    setCurrentPage(prev => Math.min(prev, Math.max(0, totalPages - 1)))
-  }, [totalPages])
-
-  const pageStart = currentPage * cardsPerPage
-  const paginatedProjects = filteredProjects.slice(pageStart, pageStart + cardsPerPage)
-  const handlePrevPage = () => setCurrentPage(prev => Math.max(prev - 1, 0))
-  const handleNextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages - 1))
-
   return (
     <main className="w-full">
-      <Navigation />
       <div className="pt-20 pb-24 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-5xl sm:text-6xl font-bold text-foreground mb-4">
-                All Projects
-              </h1>
-              <p className="text-foreground/60 text-lg max-w-2xl">
-                A comprehensive collection of 3D animations and creative projects uploaded to YouTube. Explore my work across different categories and styles.
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Filter buttons */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-12 flex flex-col items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
           >
-            {isMobile ? (
-              <div className="w-full max-w-sm">
-                <button
-                  onClick={() => setMobileFiltersOpen(prev => !prev)}
-                  className={`w-full rounded-lg border px-4 py-2 font-medium transition-colors ${
-                    mobileFiltersOpen
-                      ? 'border-accent/70 bg-accent text-accent-foreground'
-                      : 'border-border bg-muted text-foreground hover:text-foreground/80'
-                  }`}
-                >
-                  Filter
-                </button>
-                <AnimatePresence>
-                  {mobileFiltersOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="mt-3 overflow-hidden rounded-lg border border-border bg-background/60 p-3"
-                    >
-                      <div className="flex flex-wrap justify-center gap-3">
-                        {categories.map(cat => (
-                          <button
-                            key={cat}
-                            onClick={() => handleCategoryChange(cat)}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                              selectedCategory === cat
-                                ? 'bg-accent text-accent-foreground'
-                                : 'bg-muted border border-border text-foreground/70 hover:text-foreground'
-                            }`}
-                          >
-                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-3">
-                {categories.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategoryChange(cat)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                      selectedCategory === cat
-                        ? 'bg-accent text-accent-foreground'
-                        : 'bg-muted border border-border text-foreground/70 hover:text-foreground'
-                    }`}
-                  >
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </button>
-                ))}
-              </div>
-            )}
+            <h1 className="text-5xl sm:text-6xl font-bold text-foreground mb-4">
+              All Projects
+            </h1>
+            <p className="text-foreground/60 text-lg max-w-2xl">
+              A combined view of projects across motion graphics, video production, 3D, AR, design, and web work.
+            </p>
           </motion.div>
 
-          {/* Videos Grid */}
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-          >
-            {paginatedProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="group flex flex-col"
-              >
-                <div className="relative overflow-hidden rounded-xl bg-muted border border-border hover:border-accent/50 transition-all duration-300 flex-1">
-                  {/* YouTube Embed */}
-                  <div
-                    className="relative w-full overflow-hidden rounded-t-xl bg-black"
-                    style={{ paddingBottom: '51.75%' }}
-                  >
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${project.youtubeId}`}
-                      title={project.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="absolute inset-0 h-full w-full"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <div className="inline-block px-3 py-1 mb-3 rounded-full bg-accent/20 text-accent text-xs font-medium">
-                      {project.category}
-                    </div>
-                    <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-foreground/60 text-sm line-clamp-2 mb-3">
-                      {project.description}
-                    </p>
-                    <p className="text-foreground/40 text-xs">
-                      {new Date(project.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="mt-10 flex flex-col items-center gap-4">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handlePrevPage}
-                disabled={currentPage === 0}
-                className="px-4 py-2 rounded-lg border border-border bg-muted text-foreground/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:text-foreground"
-              >
-                Previous
-              </button>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage >= totalPages - 1}
-                className="px-4 py-2 rounded-lg border border-border bg-muted text-foreground/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:text-foreground"
-              >
-                Next
-              </button>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(index)}
-                  aria-label={`Go to page ${index + 1}`}
-                  className={`h-2 w-8 rounded-full transition-all ${
-                    currentPage === index ? 'bg-accent' : 'bg-muted border border-border'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
+          <ProjectGallery
+            items={allProjects}
+            title="Project Archive"
+            description="Browse all project types except photography."
+            enablePagination
+            itemsPerPage={12}
+          />
         </div>
       </div>
       <Footer />
     </main>
   )
 }
-
-

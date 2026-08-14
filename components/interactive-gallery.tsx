@@ -10,109 +10,109 @@ const galleryImages = [
     id: 1,
     src: '/homepage-gallery-images/1.jpg',
     alt: '1',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
   {
     id: 2,
     src: '/homepage-gallery-images/2.jpg',
     alt: '3D Fashion Design',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
   {
     id: 3,
     src: '/homepage-gallery-images/3.jpg',
-    alt: '3D Product Animation',
-    category: 'Music Video',
+    alt: '3D Animation',
+    category: '3D Animation',
   },
   {
     id: 4,
     src: '/homepage-gallery-images/4.jpg',
     alt: '3D AR Experience',
-    category: 'Brands',
+    category: 'Augmented Reality',
   },
   {
     id: 5,
     src: '/homepage-gallery-images/5.jpg',
-    alt: '3D Brand Animation',
-    category: 'Brands',
+    alt: '3D Animation',
+    category: '3D Animation',
   },
   {
     id: 6,
     src: '/homepage-gallery-images/6.jpg',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
   {
     id: 7,
     src: '/homepage-gallery-images/7.jpg',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
     {
     id: 8,
     src: '/homepage-gallery-images/8.jpg',
     alt: '3D Creative Visual',
-    category: 'AR',
+    category: 'Augmented Reality',
   },
     {
     id: 9,
     src: '/homepage-gallery-images/9.jpg',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
     {
     id: 10,
     src: '/homepage-gallery-images/10.jpg',
     alt: '3D Creative Visual',
-    category: 'AR',
+    category: 'Augmented Reality',
   },
     {
     id: 11,
     src: '/homepage-gallery-images/11.jpg',
     alt: '3D Creative Visual',
-    category: 'Music Video',
+    category: '3D Animation',
   },
     {
     id: 12,
     src: '/homepage-gallery-images/12.jpg',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
     {
     id: 13,
     src: '/homepage-gallery-images/13.jpg',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
     {
     id: 14,
     src: '/homepage-gallery-images/14.png',
     alt: '3D Creative Visual',
-    category: 'Brands',
+    category: '3D Animation',
   },
     {
     id: 15,
     src: '/homepage-gallery-images/15.png',
     alt: '3D Creative Visual',
-    category: 'Brands',
+    category: '3D Animation',
   },
     {
     id: 16,
     src: '/homepage-gallery-images/16.png',
     alt: '3D Creative Visual',
-    category: 'Fashion',
+    category: '3D Fashion',
   },
     {
     id: 17,
     src: '/homepage-gallery-images/17.png',
     alt: '3D Creative Visual',
-    category: 'Product',
+    category: '3D Animation',
   },
     {
     id: 18,
     src: '/homepage-gallery-images/18.png',
     alt: '3D Creative Visual',
-    category: 'Product',
+    category: '3D Animation',
   },
   
 ]
@@ -124,7 +124,7 @@ export default function InteractiveGallery() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const isMobile = useIsMobile()
 
-  const categoryOrder = ['Fashion', 'Music Video', 'Brands', 'Products', 'AR'] as const
+  const categoryOrder = ['3D Fashion', '3D Animation', 'Augmented Reality'] as const
   const categories = ['All', ...categoryOrder.filter(cat => galleryImages.some(img => img.category === cat))]
   const filteredImages = filter === 'All' ? galleryImages : galleryImages.filter(img => img.category === filter)
   const imagesPerPage = isMobile ? 2 : 6

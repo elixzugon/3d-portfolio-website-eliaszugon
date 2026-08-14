@@ -1,19 +1,15 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import ProjectGallery from '@/components/project-gallery'
 import { ContactForm } from '@/components/contact-form'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
-import { useRef } from 'react'
-import * as THREE from 'three'
+import ParallaxSection from '@/components/parallax-section'
 
 const videoItems = [
   {
     id: '1',
-    title: 'Invitantion to Cosmic Factory Openning | 2025',
+    title: 'Invitation to Cosmic Factory Opening | 2025',
     description: 'A short reel inviting guests to the Cosmic Factory opening for 2025.',
     category: 'Reel',
     thumbnail: 'https://img.youtube.com/vi/I8PnM0DvWss/hqdefault.jpg',
@@ -43,7 +39,7 @@ const videoItems = [
   },
   {
     id: '4',
-    title: 'COMO CREÉ MI PROPIA MARCA YO SOLA | XIMENA ATEM.AT & ENOVAVINTAGE',
+    title: 'How I Built My Own Brand | Ximena Atem.at & Enovavintage',
     description: 'Podcast conversation on building a brand solo with Ximena Atem.at & Enovavintage.',
     category: 'Podcast',
     thumbnail: 'https://img.youtube.com/vi/Img-6ak6FPI/hqdefault.jpg',
@@ -93,7 +89,7 @@ const videoItems = [
   },
   {
     id: '9',
-    title: 'En cada clínica, cada minuto cuenta',
+    title: 'Every Minute Counts in Every Clinic',
     description: 'Corporate video highlighting critical care response times.',
     category: 'Corporate',
     thumbnail: 'https://img.youtube.com/vi/RgvoMzEnHng/hqdefault.jpg',
@@ -103,8 +99,8 @@ const videoItems = [
   },
   {
     id: '10',
-    title: 'Emergencias Médicas Corporate Video',
-    description: 'Corporate reel for Emergencias Médicas.',
+    title: 'Emergency Medical Services Corporate Video',
+    description: 'Corporate reel for Emergency Medical Services.',
     category: 'Corporate',
     thumbnail: 'https://img.youtube.com/vi/1RKadV-nlAw/hqdefault.jpg',
     fullImage: 'https://www.youtube.com/embed/1RKadV-nlAw',
@@ -133,63 +129,38 @@ const videoItems = [
   },
 ]
 
-function Fx3Model() {
-  const { scene } = useGLTF('/models/fx3.glb')
-  const group = useRef<THREE.Group>(null)
-
-  useFrame(({ clock }) => {
-    if (group.current) {
-      const t = clock.getElapsedTime()
-      group.current.rotation.x = t * 0.12
-      group.current.rotation.y = t * 0.18
-      group.current.rotation.z = t * 0.08
-    }
-  })
-
-  return <primitive ref={group} object={scene} position={[0, -0.5, 0]} scale={5.4} />
-}
-
-useGLTF.preload('/models/fx3.glb')
-
 export default function VideoPage() {
   return (
     <main className="w-full">
-      <Navigation />
       <div className="pt-16 pb-12 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          {/* Header over 3D background */}
-          <div className="relative -mx-4 mb-12 h-[380px] overflow-hidden md:rounded-2xl bg-background">
-            <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-              <ambientLight intensity={0.6} />
-              <directionalLight position={[6, 8, 4]} intensity={1.4} />
-              <Environment preset="studio" />
-              <Fx3Model />
-              <OrbitControls enablePan={false} enableZoom={false} enableRotate={false} />
-            </Canvas>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/85" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="max-w-3xl"
-              >
-                <h1 className="text-5xl sm:text-6xl font-bold text-foreground mb-4">
-                  Video Production
-                </h1>
-                <p className="text-foreground/70 text-lg sm:text-xl">
-                  Cinematic experiences from concept to post-production. Creating compelling video content that resonates with audiences.
-                </p>
-              </motion.div>
-            </div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
+          >
+            <h1 className="text-5xl sm:text-6xl font-bold text-foreground mb-4">
+              Video Production
+            </h1>
+            <p className="text-foreground/60 text-lg max-w-2xl">
+              Cinematic experiences from concept to post-production. Creating compelling video content that resonates with audiences.
+            </p>
+          </motion.div>
+
+          <ParallaxSection
+            title="Cinematic Stories"
+            subtitle="Reels, corporate videos, podcasts, and music sessions shaped for clear visual impact."
+            backgroundImage="https://img.youtube.com/vi/I8PnM0DvWss/hqdefault.jpg"
+            height="h-[350px]"
+          />
 
           {/* Project Gallery */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-12"
+            className="mt-12 mb-12"
           >
             <ProjectGallery
               items={videoItems}

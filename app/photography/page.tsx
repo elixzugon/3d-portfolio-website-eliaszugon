@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Camera, Heart, Sparkles, Video } from 'lucide-react'
-import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import { ContactForm } from '@/components/contact-form'
 import ParallaxSection from '@/components/parallax-section'
@@ -106,7 +105,6 @@ export default function PhotographyPage() {
 
   return (
     <main className="w-full bg-background text-foreground">
-      <Navigation />
 
       {/* Hero Slideshow */}
       <section className="relative isolate overflow-hidden min-h-[460px] lg:min-h-[640px]">

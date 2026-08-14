@@ -29,20 +29,26 @@ export default function Footer() {
               <Link href="/specializations/fashion" className="text-foreground/60 hover:text-accent transition-colors text-sm">
                 3D Fashion Design
               </Link>
-              <Link href="/specializations/brand-animation" className="text-foreground/60 hover:text-accent transition-colors text-sm">
-                Brand Animation
-              </Link>
               <Link href="/specializations/augmented-reality" className="text-foreground/60 hover:text-accent transition-colors text-sm">
                 Augmented Reality
               </Link>
-              <Link href="/specializations/product-animation" className="text-foreground/60 hover:text-accent transition-colors text-sm">
-                Product Animation
+              <Link href="/specializations/3d-animation" className="text-foreground/60 hover:text-accent transition-colors text-sm">
+                3D Animation
               </Link>
               <Link href="/projects" className="text-foreground/60 hover:text-accent transition-colors text-sm">
                 All Projects
               </Link>
               <Link href="/motion-graphics" className="text-foreground/60 hover:text-accent transition-colors text-sm">
                 Motion Graphics
+              </Link>
+              <Link href="/privacy" className="text-foreground/60 hover:text-accent transition-colors text-sm">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-foreground/60 hover:text-accent transition-colors text-sm">
+                Terms of Use
+              </Link>
+              <Link href="/accessibility" className="text-foreground/60 hover:text-accent transition-colors text-sm">
+                Accessibility
               </Link>
             </nav>
           </div>
@@ -95,7 +101,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-foreground/40 text-sm">
-            © {currentYear} All rights reserved. Crafted with creativity and innovation.
+            &copy; {currentYear} All rights reserved. Crafted with creativity and innovation.
           </p>
           <p className="text-foreground/40 text-sm">
             Designed & Developed by eliaszugon.com

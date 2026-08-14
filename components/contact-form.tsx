@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 interface ContactFormProps {
   title?: string
@@ -19,13 +20,22 @@ function ContactFormComponent({
     email: '',
     subject: '',
     message: '',
+    website: '',
+    consent: false,
   })
   const [submitted, setSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+    const target = e.target
+    const { name, value } = target
+
+    if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+      setFormData(prev => ({ ...prev, [name]: target.checked }))
+      return
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
@@ -47,7 +57,7 @@ function ContactFormComponent({
       }
 
       setSubmitted(true)
-      setFormData({ name: '', email: '', subject: '', message: '' })
+      setFormData({ name: '', email: '', subject: '', message: '', website: '', consent: false })
 
       // Reset success message after 3 seconds
       setTimeout(() => setSubmitted(false), 3000)
@@ -82,6 +92,19 @@ function ContactFormComponent({
           viewport={{ once: true }}
           className="space-y-6"
         >
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           {/* Name and Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -95,6 +118,8 @@ function ContactFormComponent({
                 value={formData.name}
                 onChange={handleChange}
                 required
+                maxLength={100}
+                autoComplete="name"
                 className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                 placeholder="Your name"
               />
@@ -110,6 +135,8 @@ function ContactFormComponent({
                 value={formData.email}
                 onChange={handleChange}
                 required
+                maxLength={254}
+                autoComplete="email"
                 className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
                 placeholder="your@email.com"
               />
@@ -128,6 +155,7 @@ function ContactFormComponent({
               value={formData.subject}
               onChange={handleChange}
               required
+              maxLength={160}
               className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
               placeholder="Project inquiry"
             />
@@ -144,11 +172,30 @@ function ContactFormComponent({
               value={formData.message}
               onChange={handleChange}
               required
+              maxLength={4000}
               rows={5}
               className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
               placeholder="Tell me about your project..."
             />
           </div>
+
+          <label className="flex items-start gap-3 text-left text-sm leading-relaxed text-foreground/70">
+            <input
+              type="checkbox"
+              name="consent"
+              checked={formData.consent}
+              onChange={handleChange}
+              required
+              className="mt-1 h-4 w-4 rounded border-border bg-muted accent-accent"
+            />
+            <span>
+              I agree that my information will be used to respond to this inquiry, as described in the{' '}
+              <Link href="/privacy" className="text-accent hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
 
           {/* Submit Button */}
           <motion.button
@@ -175,6 +222,7 @@ function AnimatedSuccessMessage({ show }: { show: boolean }) {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: show ? 1 : 0, y: show ? 0 : -10 }}
+      aria-live="polite"
       className="p-4 rounded-lg bg-accent/20 border border-accent/50 text-accent"
     >
       Thank you! Your message has been received. I'll get back to you soon.
@@ -189,6 +237,7 @@ function AnimatedErrorMessage({ message }: { message: string | null }) {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
+      role="alert"
       className="p-4 rounded-lg bg-red-500/10 border border-red-500/40 text-red-400"
     >
       {message}

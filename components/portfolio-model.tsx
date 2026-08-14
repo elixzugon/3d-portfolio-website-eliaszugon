@@ -1,11 +1,11 @@
 'use client'
 
 import { useGLTF } from '@react-three/drei'
+import type { ThreeElements } from '@react-three/fiber'
 
-type PortfolioModelProps = JSX.IntrinsicElements['group']
+type PortfolioModelProps = ThreeElements['group']
 
 export function PortfolioModel(props: PortfolioModelProps) {
-  // Ruta relativa a la carpeta /public
   const gltf = useGLTF('/models/blokecambionum.glb')
 
   return (
@@ -15,6 +15,4 @@ export function PortfolioModel(props: PortfolioModelProps) {
   )
 }
 
-// Opcional: precargar el modelo
-useGLTF.preload('/models/hero-scene.tsx')
-
+useGLTF.preload('/models/blokecambionum.glb')

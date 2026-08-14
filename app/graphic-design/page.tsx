@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import ProjectGallery from '@/components/project-gallery'
 import { ContactForm } from '@/components/contact-form'
@@ -49,7 +48,6 @@ const graphicDesignItems = [
 export default function GraphicDesignPage() {
   return (
     <main className="w-full">
-      <Navigation />
       <div className="pt-16 pb-12 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
           {/* Header */}

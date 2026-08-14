@@ -9,12 +9,14 @@ import { useIsMobile } from '@/hooks/use-mobile'
 interface GalleryItem {
   id: string
   title: string
-  description: string
+  description?: string
   category: string
+  categories?: string[]
   thumbnail: string
   fullImage: string
   type: 'image' | 'video'
   videoUrl?: string
+  thumbnailTime?: number | 'middle'
 }
 
 interface ProjectGalleryProps {
@@ -29,9 +31,21 @@ interface ProjectGalleryProps {
 
 const isDirectVideoFile = (url?: string) => Boolean(url && /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url))
 
+const getItemCategories = (item: GalleryItem) => {
+  if (item.categories?.length) return item.categories
+  return item.category ? [item.category] : []
+}
+
+const getThumbnailTime = (video: HTMLVideoElement, item: GalleryItem) => {
+  if (item.thumbnailTime === 'middle') {
+    return Number.isFinite(video.duration) ? video.duration / 2 : 0
+  }
+
+  return item.thumbnailTime ?? 0
+}
+
 export default function ProjectGallery({
   items,
-  
   title,
   description,
   disableFilters,
@@ -47,12 +61,12 @@ export default function ProjectGallery({
 
   const categories = useMemo(() => {
     const availableCategories = items
-      .map(item => item.category)
+      .flatMap(getItemCategories)
       .filter((category): category is string => Boolean(category))
     return ['all', ...new Set(availableCategories)]
   }, [items])
   const showFilters = !disableFilters && categories.length > 1
-  const filteredItems = filter === 'all' ? items : items.filter(item => item.category === filter)
+  const filteredItems = filter === 'all' ? items : items.filter(item => getItemCategories(item).includes(filter))
 
   const baseItemsPerPage = Math.max(1, itemsPerPage ?? (isMobile ? 2 : 6))
   const shouldPaginate = !!enablePagination && filteredItems.length > baseItemsPerPage
@@ -180,12 +194,19 @@ export default function ProjectGallery({
                     loop
                     playsInline
                     preload="metadata"
+                    onLoadedMetadata={event => {
+                      if (!item.thumbnailTime) return
+
+                      const video = event.currentTarget
+                      video.currentTime = getThumbnailTime(video, item)
+                    }}
                     onMouseEnter={event => {
                       void event.currentTarget.play().catch(() => undefined)
                     }}
                     onMouseLeave={event => {
-                      event.currentTarget.pause()
-                      event.currentTarget.currentTime = 0
+                      const video = event.currentTarget
+                      video.pause()
+                      video.currentTime = getThumbnailTime(video, item)
                     }}
                   />
                 ) : (
@@ -209,7 +230,7 @@ export default function ProjectGallery({
         </AnimatePresence>
       </motion.div>
 
-  {shouldPaginate && (
+      {shouldPaginate && (
         <div className="mt-10 flex flex-col items-center gap-4">
           <div className="flex items-center gap-3">
             <button
@@ -299,7 +320,9 @@ export default function ProjectGallery({
                 {!hideCategoryBadge && (
                   <p className="mb-4 text-foreground/60 capitalize">{selectedItem.category}</p>
                 )}
-                <p className="text-base leading-relaxed text-foreground">{selectedItem.description}</p>
+                {selectedItem.description && (
+                  <p className="text-base leading-relaxed text-foreground">{selectedItem.description}</p>
+                )}
               </div>
             </motion.div>
           </motion.div>

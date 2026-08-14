@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Navigation from '@/components/navigation'
 import Footer from '@/components/footer'
 import ProjectGallery from '@/components/project-gallery'
 import { ContactForm } from '@/components/contact-form'
@@ -10,7 +9,7 @@ import ParallaxSection from '@/components/parallax-section'
 const arItems = [
   {
     id: '1',
-    title: 'Fruitopia Prelease Animation',
+    title: 'Fruitopia Pre-launch Animation',
     category: '',
     thumbnail: 'https://img.youtube.com/vi/1ND2z40c3sE/hqdefault.jpg',
     fullImage: 'https://img.youtube.com/vi/1ND2z40c3sE/hqdefault.jpg',
@@ -49,7 +48,6 @@ const arItems = [
 export default function AugmentedRealityPage() {
   return (
     <main className="w-full">
-      <Navigation />
       <div className="pt-16 pb-12 bg-background">
         <div className="px-4">
           <div className="max-w-7xl mx-auto">

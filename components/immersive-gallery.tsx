@@ -1,11 +1,57 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Environment, Html, OrbitControls, useGLTF } from '@react-three/drei'
+import { TextureLoader } from 'three'
 
 import { useIsMobile } from '@/hooks/use-mobile'
+
+const GLTF_TEXTURE_ERROR_FILTER = '__eliasGLTFTextureErrorFilter'
+type FilteredConsoleError = typeof console.error & { [GLTF_TEXTURE_ERROR_FILTER]?: boolean }
+
+// GLTFLoader recovers from failed texture decodes, but Next dev overlay treats its console.error as fatal.
+function installGLTFTextureErrorFilter() {
+  if (typeof window === 'undefined') return
+
+  const currentError = console.error as FilteredConsoleError
+  if (currentError[GLTF_TEXTURE_ERROR_FILTER]) return
+
+  const originalError = console.error.bind(console)
+  const filteredError = ((...args: Parameters<typeof console.error>) => {
+    const [message, textureUrl] = args
+    const isRecoverableGLTFTextureError =
+      message === "THREE.GLTFLoader: Couldn't load texture" &&
+      typeof textureUrl === 'string' &&
+      textureUrl.startsWith('blob:')
+
+    if (isRecoverableGLTFTextureError) return
+
+    originalError(...args)
+  }) as FilteredConsoleError
+
+  filteredError[GLTF_TEXTURE_ERROR_FILTER] = true
+  console.error = filteredError
+}
+
+installGLTFTextureErrorFilter()
+
+// These fashion GLBs embed large WebP textures; TextureLoader is more reliable than ImageBitmapLoader here.
+class BrowserTextureLoaderExtension {
+  name = 'BrowserTextureLoaderExtension'
+
+  constructor(parser: any) {
+    const textureLoader = new TextureLoader(parser.options.manager)
+    textureLoader.setCrossOrigin(parser.options.crossOrigin)
+    textureLoader.setRequestHeader(parser.options.requestHeader)
+    parser.textureLoader = textureLoader
+  }
+
+  afterRoot() {
+    return null
+  }
+}
 
 type SceneModelType =
   | 'ramen'
@@ -36,7 +82,7 @@ const immersiveScenes: ImmersiveScene[] = [
   },
   {
     id: 'crfw13',
-    title: 'Florévia del Infinito',
+    title: 'Infinite Florevia',
     description: 'Special dress made for Costa Rica Fashion Week 2024 Runway by Cosmic Factory',
     category: 'Funtasia',
     modelType: 'crfw13',
@@ -60,7 +106,7 @@ const immersiveScenes: ImmersiveScene[] = [
   },
   {
     id: 'lechuga',
-    title: 'Lechuga Dress',
+    title: 'Lettuce Dress',
     description: 'A Fruitopia Collection dress for Cosmic Factory',
     category: 'Fruitopia',
     modelType: 'lechuga',
@@ -68,7 +114,7 @@ const immersiveScenes: ImmersiveScene[] = [
   },
   {
     id: 'crfw16',
-    title: 'Burbuja Obsidiana',
+    title: 'Obsidian Bubble Set',
     description: 'Special set made for Costa Rica Fashion Week 2024 Runway by Cosmic Factory',
     category: 'Funtasia',
     modelType: 'crfw16',
@@ -76,40 +122,13 @@ const immersiveScenes: ImmersiveScene[] = [
   },
   {
     id: 'pomodoro',
-    title: 'Pomodoro Dress',
+    title: 'Tomato Dress',
     description: 'A Fruitopia Collection dress for Cosmic Factory',
     category: 'Fruitopia',
     modelType: 'pomodoro',
     accent: '#f97316',
   },
 ]
-
-class StripWebPExtension {
-  name = 'StripWebPExtension'
-  constructor(parser: any) {
-    const { json } = parser ?? {}
-    if (json?.textures) {
-      for (const tex of json.textures) {
-        const ext = tex.extensions?.EXT_texture_webp
-        if (ext && typeof ext.source === 'number') {
-          tex.source = ext.source
-          if (tex.extensions) {
-            delete tex.extensions.EXT_texture_webp
-            if (!Object.keys(tex.extensions).length) delete tex.extensions
-          }
-        }
-      }
-    }
-    const filter = (list?: string[]) => (Array.isArray(list) ? list.filter(x => x !== 'EXT_texture_webp') : list)
-    if (json) {
-      json.extensionsRequired = filter(json.extensionsRequired)
-      json.extensionsUsed = filter(json.extensionsUsed)
-    }
-  }
-  afterRoot(root: unknown) {
-    return root
-  }
-}
 
 const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, number, number]; scale: number }> = {
   ramen: { url: '/models/blokejortsramencombo.glb', position: [0, 0, 0], scale: 3 },
@@ -121,18 +140,10 @@ const MODEL_CONFIG: Record<SceneModelType, { url: string; position: [number, num
   pomodoro: { url: '/models/vestidopomodoro.glb', position: [0, 0, 0], scale: 3 },
 }
 
-Object.values(MODEL_CONFIG).forEach(config => {
-  if (config.url) {
-    useGLTF.preload(config.url, undefined, undefined, loader =>
-      loader.register((parser: any) => new StripWebPExtension(parser))
-    )
-  }
-})
-
 function SceneModel({ type }: { type: SceneModelType }) {
   const config = MODEL_CONFIG[type]
   const { scene } = useGLTF(config.url, undefined, undefined, loader =>
-    loader.register((parser: any) => new StripWebPExtension(parser))
+    loader.register((parser: any) => new BrowserTextureLoaderExtension(parser))
   )
   return <primitive object={scene} position={config.position} scale={config.scale} />
 }
@@ -266,11 +277,13 @@ export default function ImmersiveGallery() {
                 <pointLight position={[10, 10, 10]} intensity={1.5} color={scene.accent} />
                 <pointLight position={[-10, -5, -5]} intensity={0.8} color="#ffffff" />
                 <Environment preset="studio" />
-                <SceneModel type={scene.modelType} />
+                <Suspense fallback={null}>
+                  <SceneModel type={scene.modelType} />
+                </Suspense>
                 <OrbitControls enablePan={false} enableZoom enableRotate autoRotate autoRotateSpeed={1.2} />
                 <Html position={[0, -2.6, 0]} distanceFactor={2} center>
                   <p className="pointer-events-none select-none text-xs text-foreground/50">
-                    Drag to rotate — scroll to zoom
+                    Drag to rotate - scroll to zoom
                   </p>
                 </Html>
               </Canvas>
@@ -354,11 +367,13 @@ export default function ImmersiveGallery() {
                   <pointLight position={[10, 10, 10]} intensity={1.8} color={fullscreenScene.accent} />
                   <pointLight position={[-15, -10, -5]} intensity={0.8} color="#ffffff" />
                   <Environment preset="apartment" />
-                  <SceneModel type={fullscreenScene.modelType} />
+                  <Suspense fallback={null}>
+                    <SceneModel type={fullscreenScene.modelType} />
+                  </Suspense>
                   <OrbitControls enablePan={false} enableZoom enableRotate autoRotate autoRotateSpeed={1} />
                   <Html position={[0, -2.8, 0]} distanceFactor={2} center>
                     <p className="pointer-events-none select-none text-xs text-foreground/50">
-                      Drag to rotate — scroll to zoom
+                      Drag to rotate - scroll to zoom
                     </p>
                   </Html>
                 </Canvas>

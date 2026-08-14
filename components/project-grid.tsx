@@ -14,11 +14,11 @@ const projects3D = [
   },
   {
     id: 2,
-    title: '3D Animation For Brands',
-    description: 'Professional brand animations, promotional videos, and animated storytelling for commercial use',
-    category: 'Brand Animation',
+    title: '3D Animation',
+    description: 'Dimensional animation for logos, products, campaigns, and commercial storytelling',
+    category: '3D Animation',
     video: '/homepage-videos/loopluna.mp4',
-    route: '/specializations/brand-animation',
+    route: '/specializations/3d-animation',
   },
   {
     id: 3,
@@ -27,14 +27,6 @@ const projects3D = [
     category: 'AR Experience',
     video: '/homepage-videos/fruitopiaAR.mp4',
     route: '/specializations/augmented-reality',
-  },
-  {
-    id: 4,
-    title: 'Product Animation',
-    description: 'Dynamic product demonstrations and 3D visualization animations for e-commerce and marketing',
-    category: 'Product Animation',
-    video: '/homepage-videos/bodegalamp.mp4',
-    route: '/specializations/product-animation',
   },
 ]
 
@@ -51,7 +43,7 @@ export default function ProjectGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects3D.map((project, index) => (
             <motion.div
               key={project.id}
@@ -63,30 +55,18 @@ export default function ProjectGrid() {
             >
               <Link href={project.route}>
                 <div className="relative overflow-hidden rounded-xl bg-muted border border-border hover:border-accent/50 transition-all duration-300">
-                  {/* Image */}
-{/* Media: video o imagen */}
-<div className="relative w-full h-64 overflow-hidden">
-  {project.video ? (
-    <video
-      src={project.video}
-      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="metadata" // no descarga todo de una vez
-    />
-  ) : (
-    <img
-      src={project.image || "/placeholder.svg"}
-      alt={project.title}
-      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-    />
-  )}
-
-  {/* Gradient overlay */}
-  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-</div>
+                  <div className="relative w-full h-64 overflow-hidden">
+                    <video
+                      src={project.video}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                  </div>
 
                   {/* Content */}
                   <div className="p-6">

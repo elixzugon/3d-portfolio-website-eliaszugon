@@ -23,9 +23,8 @@ export default function Navigation() {
 
   const specializations = [
     { href: '/specializations/fashion', label: '3D Fashion Design' },
-    { href: '/specializations/brand-animation', label: '3D Animation For Brands' },
+    { href: '/specializations/3d-animation', label: '3D Animation' },
     { href: '/specializations/augmented-reality', label: 'Augmented Reality' },
-    { href: '/specializations/product-animation', label: 'Product Animation' },
   ]
 
   return (

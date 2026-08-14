@@ -46,13 +46,13 @@ export default function HeroScene() {
       >
         <div className="max-w-2xl">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-white/75 sm:text-sm">
-            Bienvenido al universo de Elias Zugon
+            Welcome to the Elias Zugon universe
           </p>
           <h1 className="text-4xl leading-tight font-bold text-white sm:text-5xl lg:text-6xl">
-            Descubre un sitio hecho para explorar 3D, fashion visuals, AR y motion design.
+            Explore 3D fashion visuals, augmented reality, motion design, and cinematic brand work.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-            Desliza para recorrer el portafolio o entra directo a proyectos creados para marcas y experiencias digitales.
+            Browse the portfolio or jump straight into projects built for brands, campaigns, and digital experiences.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
@@ -60,13 +60,13 @@ export default function HeroScene() {
               href="/projects"
               className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90 sm:text-base"
             >
-              Explorar proyectos
+              Explore Projects
             </a>
             <a
               href="/specializations/fashion"
               className="rounded-full border border-white/55 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/15 sm:text-base"
             >
-              Ver especializaciones
+              View Specializations
             </a>
           </div>
         </div>

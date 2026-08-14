@@ -51,7 +51,7 @@ export default function Interactive3DModel({
             <Environment preset="studio" />
             <OrbitControls enableZoom={true} enablePan={false} autoRotate />
             <Html position={[0, -1.5, 0]} distanceFactor={1} center>
-              <p className="text-foreground/40 text-xs pointer-events-none select-none">Drag to rotate • Scroll to zoom</p>
+              <p className="text-foreground/40 text-xs pointer-events-none select-none">Drag to rotate - scroll to zoom</p>
             </Html>
           </Canvas>
         </div>
