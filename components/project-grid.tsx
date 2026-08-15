@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
+import { getVideoPosterUrl } from '@/lib/media'
+
 const projects3D = [
   {
     id: 1,
@@ -58,12 +60,13 @@ export default function ProjectGrid() {
                   <div className="relative w-full h-64 overflow-hidden">
                     <video
                       src={project.video}
+                      poster={getVideoPosterUrl(project.video)}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       autoPlay
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="none"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
                   </div>

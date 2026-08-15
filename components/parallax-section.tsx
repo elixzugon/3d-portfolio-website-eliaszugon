@@ -3,6 +3,8 @@
 import { useScroll, useTransform, motion } from 'framer-motion'
 import { useRef } from 'react'
 
+import { getVideoPosterUrl } from '@/lib/media'
+
 interface ParallaxSectionProps {
   title: string
   subtitle?: string
@@ -41,12 +43,13 @@ export default function ParallaxSection({
         {backgroundVideo ? (
           <video
             src={backgroundVideo}
+            poster={getVideoPosterUrl(backgroundVideo)}
             className="w-full h-full object-cover"
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="none"
           />
         ) : (
           <div

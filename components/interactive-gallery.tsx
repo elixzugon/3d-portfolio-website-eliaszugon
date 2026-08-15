@@ -8,109 +8,109 @@ import { useIsMobile } from '@/hooks/use-mobile'
 const galleryImages = [
   {
     id: 1,
-    src: '/homepage-gallery-images/1.jpg',
+    src: '/homepage-gallery-images/1.webp',
     alt: '1',
     category: '3D Fashion',
   },
   {
     id: 2,
-    src: '/homepage-gallery-images/2.jpg',
+    src: '/homepage-gallery-images/2.webp',
     alt: '3D Fashion Design',
     category: '3D Fashion',
   },
   {
     id: 3,
-    src: '/homepage-gallery-images/3.jpg',
+    src: '/homepage-gallery-images/3.webp',
     alt: '3D Animation',
     category: '3D Animation',
   },
   {
     id: 4,
-    src: '/homepage-gallery-images/4.jpg',
+    src: '/homepage-gallery-images/4.webp',
     alt: '3D AR Experience',
     category: 'Augmented Reality',
   },
   {
     id: 5,
-    src: '/homepage-gallery-images/5.jpg',
+    src: '/homepage-gallery-images/5.webp',
     alt: '3D Animation',
     category: '3D Animation',
   },
   {
     id: 6,
-    src: '/homepage-gallery-images/6.jpg',
+    src: '/homepage-gallery-images/6.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
   {
     id: 7,
-    src: '/homepage-gallery-images/7.jpg',
+    src: '/homepage-gallery-images/7.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
     {
     id: 8,
-    src: '/homepage-gallery-images/8.jpg',
+    src: '/homepage-gallery-images/8.webp',
     alt: '3D Creative Visual',
     category: 'Augmented Reality',
   },
     {
     id: 9,
-    src: '/homepage-gallery-images/9.jpg',
+    src: '/homepage-gallery-images/9.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
     {
     id: 10,
-    src: '/homepage-gallery-images/10.jpg',
+    src: '/homepage-gallery-images/10.webp',
     alt: '3D Creative Visual',
     category: 'Augmented Reality',
   },
     {
     id: 11,
-    src: '/homepage-gallery-images/11.jpg',
+    src: '/homepage-gallery-images/11.webp',
     alt: '3D Creative Visual',
     category: '3D Animation',
   },
     {
     id: 12,
-    src: '/homepage-gallery-images/12.jpg',
+    src: '/homepage-gallery-images/12.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
     {
     id: 13,
-    src: '/homepage-gallery-images/13.jpg',
+    src: '/homepage-gallery-images/13.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
     {
     id: 14,
-    src: '/homepage-gallery-images/14.png',
+    src: '/homepage-gallery-images/14.webp',
     alt: '3D Creative Visual',
     category: '3D Animation',
   },
     {
     id: 15,
-    src: '/homepage-gallery-images/15.png',
+    src: '/homepage-gallery-images/15.webp',
     alt: '3D Creative Visual',
     category: '3D Animation',
   },
     {
     id: 16,
-    src: '/homepage-gallery-images/16.png',
+    src: '/homepage-gallery-images/16.webp',
     alt: '3D Creative Visual',
     category: '3D Fashion',
   },
     {
     id: 17,
-    src: '/homepage-gallery-images/17.png',
+    src: '/homepage-gallery-images/17.webp',
     alt: '3D Creative Visual',
     category: '3D Animation',
   },
     {
     id: 18,
-    src: '/homepage-gallery-images/18.png',
+    src: '/homepage-gallery-images/18.webp',
     alt: '3D Creative Visual',
     category: '3D Animation',
   },
@@ -246,6 +246,8 @@ export default function InteractiveGallery() {
                   <img
                     src={image.src || "/placeholder.svg"}
                     alt={image.alt}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
@@ -311,6 +313,8 @@ export default function InteractiveGallery() {
                 <img
                   src={galleryImages.find(img => img.id === selectedId)?.src || "/placeholder.svg"}
                   alt="Gallery lightbox"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full rounded-lg"
                 />
                 <button

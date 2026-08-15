@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
 import { useIsMobile } from '@/hooks/use-mobile'
+import { getVideoPosterUrl, isDirectVideoFile } from '@/lib/media'
 
 interface GalleryItem {
   id: string
@@ -28,8 +29,6 @@ interface ProjectGalleryProps {
   itemsPerPage?: number
   hideCategoryBadge?: boolean
 }
-
-const isDirectVideoFile = (url?: string) => Boolean(url && /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url))
 
 const getItemCategories = (item: GalleryItem) => {
   if (item.categories?.length) return item.categories
@@ -189,11 +188,12 @@ export default function ProjectGallery({
                   <motion.video
                     src={item.thumbnail}
                     aria-label={item.title}
+                    poster={getVideoPosterUrl(item.thumbnail)}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    preload="none"
                     onLoadedMetadata={event => {
                       if (!item.thumbnailTime) return
 
@@ -213,6 +213,8 @@ export default function ProjectGallery({
                   <motion.img
                     src={item.thumbnail}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                 )}
@@ -291,10 +293,12 @@ export default function ProjectGallery({
                     <video
                       src={selectedItem.videoUrl}
                       title={selectedItem.title}
+                      poster={getVideoPosterUrl(selectedItem.videoUrl)}
                       className="h-full w-full object-contain"
                       controls
                       autoPlay
                       playsInline
+                      preload="metadata"
                     />
                   ) : (
                     <iframe
@@ -311,6 +315,8 @@ export default function ProjectGallery({
                   <img
                     src={selectedItem.fullImage || '/placeholder.svg'}
                     alt={selectedItem.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-contain"
                   />
                 )}

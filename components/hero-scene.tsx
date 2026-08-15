@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
+import { getVideoPosterUrl } from '@/lib/media'
+
 const HERO_VIDEO_SRC = '/homepage-videos/bodegalamp.mp4'
 
 export default function HeroScene() {
@@ -23,11 +25,12 @@ export default function HeroScene() {
       <div className="absolute inset-0 overflow-hidden">
         <video
           src={HERO_VIDEO_SRC}
+          poster={getVideoPosterUrl(HERO_VIDEO_SRC)}
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="none"
           className="absolute top-1/2 left-1/2 h-[114%] w-[114%] max-w-none object-cover will-change-transform"
           style={{
             transform: `translate(-50%, calc(-50% + ${videoTranslateY}px)) scale(1.06)`,
